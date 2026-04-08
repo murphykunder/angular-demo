@@ -7,13 +7,13 @@ import { Directive, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 }
 export class ResizableColumnDirectiveDirective implements OnInit {
 
   @Input() colIndex!: number;
-  @Input() isResizing = false;
   @Output() resize = new EventEmitter<{ colIndex: number, newWidthPercent: number }>();
   @Output() resizingChange = new EventEmitter<boolean>();
 
   private startX = 0;
   private startWidth = 0;
   private handle!: HTMLElement;
+  private isResizing = false;
 
   constructor(private el: ElementRef, private renderer: Renderer2) { }
 
