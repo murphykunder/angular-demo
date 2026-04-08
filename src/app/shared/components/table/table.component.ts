@@ -1,5 +1,6 @@
-import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ResizableColumnDirectiveDirective } from '../../directives/resizable-column-directive.directive';
 
 export interface TableColumn<T> {
   key: keyof T;
@@ -13,7 +14,8 @@ export interface TableColumn<T> {
 @Component({
   selector: 'app-table',
   imports: [
-    DragDropModule
+    DragDropModule,
+    ResizableColumnDirectiveDirective
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -31,10 +33,6 @@ export class TableComponent<T> implements OnInit, OnChanges {
   sortKey: keyof T | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  private colStartX = 0;
-  private colStartWidth = 0;
-  private resizingColIndex: number | null = null;
-  private colStartWidthPercent = 0;
   isColResizing = false;
   tableStartWidthPx = 0;
 
@@ -105,60 +103,13 @@ export class TableComponent<T> implements OnInit, OnChanges {
     moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
   }
 
-  initiateColResize(event: MouseEvent, colIndex: number) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isColResizing = true;
-    this.resizingColIndex = colIndex;
-
-    const th = (event.target as HTMLElement).parentElement!;
-    const table = th.closest('table') as HTMLTableElement;
-
-    this.colStartX = event.pageX;
-
-    // Convert % width to px
-    const thWidthPx = th.getBoundingClientRect().width;
-    const tableWidthPx = table.getBoundingClientRect().width;
-
-    this.colStartWidth = thWidthPx;
-    this.tableStartWidthPx = tableWidthPx;
-
-    document.addEventListener('mousemove', this.startColumnResize);
-    document.addEventListener('mouseup', this.endColumnResize);
-  }
-
-  startColumnResize = (event: MouseEvent) => {
-    if (this.resizingColIndex === null) return;
-
-    const dx = event.pageX - this.colStartX;
-
-    // New width in px
-    const newWidthPx = this.colStartWidth + dx;
-
-    if (newWidthPx > 50) { // minimum 50px
-      const table = document.querySelector('table.custom-table') as HTMLTableElement;
-      const tableWidthPx = table.getBoundingClientRect().width;
-
-      // Convert px back to %
-      const newWidthPercent = (newWidthPx / tableWidthPx) * 100;
-
-      this.columns[this.resizingColIndex].width = `${newWidthPercent}%`;
-    }
-  };
-
-  endColumnResize = () => {
-    console.log('endColumnResize')
-    document.removeEventListener('mousemove', this.startColumnResize);
-    document.removeEventListener('mouseup', this.endColumnResize);
-    this.resizingColIndex = null;
-    setTimeout(() => {
-      this.isColResizing = false;
-    }, 0);
-  };
-
   getTableWidthPercent(): number {
     return this.columns.reduce((sum, col) => {
       return sum + (parseFloat(col.width ?? '0'));
     }, 0);
+  }
+
+  onColumnResize(event: { colIndex: number, newWidthPercent: number }) {
+    this.columns[event.colIndex].width = `${event.newWidthPercent}%`;
   }
 }

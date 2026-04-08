@@ -5,12 +5,13 @@
                 @for (column of columns; track $index) {
                 <th cdkDrag [cdkDragDisabled]="!column.draggable" (click)="sort(column)"
                     [class.sortable]="column.sortable" [style.width]="column.width" [class.asc]="showAscIcon(column)"
-                    [class.desc]="showDescIcon(column)">
+                    [class.desc]="showDescIcon(column)"
+                    appResizableColumnDirective
+                    [colIndex]="$index"
+                     (resize)="onColumnResize($event)"
+                    [isResizing]="isColResizing"
+                    >
                     {{ column.label }}
-                    @if (column.sortable) {
-                    <span class="resize-handle" (mousedown)="initiateColResize($event, $index)"
-                        ></span>
-                    }
                 </th>
                 }
             </tr>
