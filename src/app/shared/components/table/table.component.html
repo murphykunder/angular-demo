@@ -1,22 +1,15 @@
 <div class="table-wrapper">
     <table class="custom-table">
-        <thead
-            cdkDropList
-            cdkDropListOrientation="horizontal"
-            (cdkDropListDropped)="dropColumn($event)"
-        >
+        <thead cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
             <tr>
                 @for (column of columns; track $index) {
-                <th 
-                    cdkDrag
-                    [cdkDragDisabled]="!column.draggable"
-                    (click)="sort(column)" [class.sortable]="column.sortable"
-                    [style.width]="column.width"
-                    [class.asc]="showAscIcon(column)"
+                <th cdkDrag [cdkDragDisabled]="!column.draggable" (click)="sort(column)"
+                    [class.sortable]="column.sortable" [style.width]="column.width" [class.asc]="showAscIcon(column)"
                     [class.desc]="showDescIcon(column)">
                     {{ column.label }}
                     @if (column.sortable) {
-                     <span class="resize-handle" (mousedown)="initiateColResize($event, $index)"></span>
+                    <span class="resize-handle" (mousedown)="initiateColResize($event, $index)"
+                        ></span>
                     }
                 </th>
                 }

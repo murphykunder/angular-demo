@@ -106,6 +106,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
 
   initiateColResize(event: MouseEvent, colIndex: number): void {
     event.preventDefault();
+    event.stopPropagation();
     this.isColResizing = true;
     this.resizingColIndex = colIndex;
 

@@ -19,7 +19,7 @@ export class TodosComponent implements AfterViewInit {
   columns: TableColumn<Todo>[] = [
     { key: 'userId', label: 'User ID', sortable: true, width: '10%', resizable: true },
     { key: 'id', label: 'Todo ID', sortable: true, width: '10%', resizable: true },
-    { key: 'title', label: 'Title', sortable: true, draggable: false, resizable: true, width: '60%' },
+    { key: 'title', label: 'Title', sortable: true, draggable: true, resizable: true, width: '60%' },
     { key: 'completed', label: 'Completed', sortable: false, draggable: false, width: '20%' }
   ];
 
