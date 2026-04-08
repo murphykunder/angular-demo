@@ -1,0 +1,128 @@
+.table-wrapper {
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background-color: var(--white);
+}
+
+/* Header */
+.custom-table thead {
+  background-color: var(--table-header-bg-color);
+}
+
+.custom-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  user-select: none;
+  position: relative;
+}
+
+.custom-table th:last-child {
+  border-right: none;
+}
+
+.custom-table th.sortable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.custom-table th.sortable:hover {
+  background-color: #eaeef3;
+}
+
+.custom-table th.sortable::after {
+  content: '⇅';
+  font-size: 0.8rem;
+  margin-left: 6px;
+  font-weight: 100;
+}
+
+.custom-table th.sortable.asc::after {
+  content: '▲';
+}
+
+.custom-table th.sortable.desc::after {
+  content: '▼';
+}
+
+/* Sort arrow */
+.custom-table th span {
+  margin-left: 6px;
+}
+
+/* Body rows */
+.custom-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+.custom-table td:last-child {
+  border-right: none;
+}
+
+.custom-table tbody {
+  font-size: 0.95rem;
+}
+
+.custom-table tbody tr:hover {
+  background-color: var(--table-row-hover-bg-color);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--default-padding);
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--white);
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover {
+  background-color: var(--blue-101);
+}
+
+.pagination button.active {
+  background-color: var(--blue-102);
+  color: var(--white);
+  border-color: var(--blue-102);
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+// /* Responsive tweak */
+// @media (max-width: 600px) {
+//   .custom-table th,
+//   .custom-table td {
+//     padding: 10px;
+//     font-size: 12px;
+//   }
+
+//   .pagination button {
+//     padding: 5px 8px;
+//     font-size: 12px;
+//   }
+// }

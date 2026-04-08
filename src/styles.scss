@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --blue-101: #f0f4f8;
+    --blue-102: #1976d2;
+    --border-color: #d0d7de;
+    --border-radius: 6px;
+    --default-padding: 16px;
+    --table-header-bg-color: #f5f7fa;
+    --table-row-hover-bg-color: #f1f5f9;
+    --text-color: #333;
+    --white: #ffffff;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+html, body, * {
+    color: var(--text-color);
+}

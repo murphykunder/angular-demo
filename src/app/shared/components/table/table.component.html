@@ -1,0 +1,36 @@
+<div class="table-wrapper">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                @for (column of columns; track $index) {
+                <th (click)="sort(column)" [class.sortable]="column.sortable"
+                    [class.asc]="showAscIcon(column)"
+                    [class.desc]="showDescIcon(column)">
+                    {{ column.label }}
+                </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (row of displayedData; track $index) {
+            <tr>
+                @for (column of columns; track $index) {
+                <td>
+                    {{ row[column.key] }}
+                </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    <button (click)="goToPage(currentPage-1)" [disabled]="currentPage === 1">Previous</button>
+    @for (p of [].constructor(totalPages); track $index) {
+    <button (click)="goToPage($index + 1)" [class.active]="currentPage === $index + 1">
+        {{ $index + 1 }}
+    </button>
+    }
+    <button (click)="goToPage(currentPage+1)" [disabled]="currentPage === totalPages">Next</button>
+</div>
