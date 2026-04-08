@@ -9,6 +9,7 @@ export class ResizableColumnDirectiveDirective implements OnInit {
   @Input() colIndex!: number;
   @Input() isResizing = false;
   @Output() resize = new EventEmitter<{ colIndex: number, newWidthPercent: number }>();
+  @Output() resizingChange = new EventEmitter<boolean>();
 
   private startX = 0;
   private startWidth = 0;
@@ -28,6 +29,7 @@ export class ResizableColumnDirectiveDirective implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isResizing = true;
+    this.resizingChange.emit(true); // notify parent
     this.startX = event.pageX;
     this.startWidth = this.el.nativeElement.getBoundingClientRect().width;
 
@@ -50,9 +52,13 @@ export class ResizableColumnDirectiveDirective implements OnInit {
   };
 
   private onMouseUp = () => {
-    this.isResizing = false;
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseup', this.onMouseUp);
+    setTimeout(() => {
+      this.isResizing = false;
+      this.resizingChange.emit(false); // notify parent
+    }, 0);
+
   };
 
 }

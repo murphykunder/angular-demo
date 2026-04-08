@@ -9,6 +9,7 @@
                     appResizableColumnDirective
                     [colIndex]="$index"
                      (resize)="onColumnResize($event)"
+                     (resizingChange)="isColResizing = $event"
                     [isResizing]="isColResizing"
                     >
                     {{ column.label }}
