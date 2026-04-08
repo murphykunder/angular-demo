@@ -1,5 +1,5 @@
 <div class="table-wrapper">
-    <table class="custom-table">
+    <table class="custom-table" [style.width.%]="getTableWidthPercent()">
         <thead cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
             <tr>
                 @for (column of columns; track $index) {

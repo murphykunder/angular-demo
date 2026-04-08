@@ -36,6 +36,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
   private resizingColIndex: number | null = null;
   private colStartWidthPercent = 0;
   isColResizing = false;
+  tableStartWidthPx = 0;
 
   ngOnInit(): void {
     this.updateTable();
@@ -104,22 +105,23 @@ export class TableComponent<T> implements OnInit, OnChanges {
     moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
   }
 
-  initiateColResize(event: MouseEvent, colIndex: number): void {
+  initiateColResize(event: MouseEvent, colIndex: number) {
     event.preventDefault();
     event.stopPropagation();
     this.isColResizing = true;
     this.resizingColIndex = colIndex;
 
-    const th = (event.target as HTMLElement).parentElement!; // current <th>
+    const th = (event.target as HTMLElement).parentElement!;
     const table = th.closest('table') as HTMLTableElement;
 
     this.colStartX = event.pageX;
 
-    // Get current width in px
+    // Convert % width to px
     const thWidthPx = th.getBoundingClientRect().width;
     const tableWidthPx = table.getBoundingClientRect().width;
 
-    this.colStartWidthPercent = (thWidthPx / tableWidthPx) * 100;
+    this.colStartWidth = thWidthPx;
+    this.tableStartWidthPx = tableWidthPx;
 
     document.addEventListener('mousemove', this.startColumnResize);
     document.addEventListener('mouseup', this.endColumnResize);
@@ -128,17 +130,20 @@ export class TableComponent<T> implements OnInit, OnChanges {
   startColumnResize = (event: MouseEvent) => {
     if (this.resizingColIndex === null) return;
 
-    const table = document.querySelector('table.custom-table') as HTMLTableElement;
-    const tableWidthPx = table.getBoundingClientRect().width;
     const dx = event.pageX - this.colStartX;
 
-    const dxPercent = (dx / tableWidthPx) * 100;
-    const newWidth = this.colStartWidthPercent + dxPercent;
+    // New width in px
+    const newWidthPx = this.colStartWidth + dx;
 
-    if (newWidth > 5) { // minimum 5%
-      this.columns[this.resizingColIndex].width = `${newWidth}%`;
+    if (newWidthPx > 50) { // minimum 50px
+      const table = document.querySelector('table.custom-table') as HTMLTableElement;
+      const tableWidthPx = table.getBoundingClientRect().width;
+
+      // Convert px back to %
+      const newWidthPercent = (newWidthPx / tableWidthPx) * 100;
+
+      this.columns[this.resizingColIndex].width = `${newWidthPercent}%`;
     }
-
   };
 
   endColumnResize = () => {
@@ -151,4 +156,9 @@ export class TableComponent<T> implements OnInit, OnChanges {
     }, 0);
   };
 
+  getTableWidthPercent(): number {
+    return this.columns.reduce((sum, col) => {
+      return sum + (parseFloat(col.width ?? '0'));
+    }, 0);
+  }
 }
