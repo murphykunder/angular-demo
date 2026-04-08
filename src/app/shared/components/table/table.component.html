@@ -3,13 +3,18 @@
         <thead cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
             <tr>
                 @for (column of columns; track $index) {
-                <th cdkDrag [cdkDragDisabled]="!column.draggable" (click)="sort(column)"
-                    [class.sortable]="column.sortable" [style.width]="column.width" [class.asc]="showAscIcon(column)"
+                <th 
+                    [style.width]="column.width" 
+                    cdkDrag 
+                    [cdkDragDisabled]="!column.draggable" 
+                    (click)="sort(column)"
+                    [class.sortable]="column.sortable" 
+                    [class.asc]="showAscIcon(column)"
                     [class.desc]="showDescIcon(column)"
                     appResizableColumnDirective
                     [colIndex]="$index"
-                     (resize)="onColumnResize($event)"
-                     (resizingChange)="isColResizing = $event"
+                    (resize)="onColumnResize($event)"
+                    (resizingChange)="isColResizing = $event"
                     >
                     {{ column.label }}
                 </th>
