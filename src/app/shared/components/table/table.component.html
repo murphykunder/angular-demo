@@ -1,12 +1,23 @@
 <div class="table-wrapper">
     <table class="custom-table">
-        <thead>
+        <thead
+            cdkDropList
+            cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="dropColumn($event)"
+        >
             <tr>
                 @for (column of columns; track $index) {
-                <th (click)="sort(column)" [class.sortable]="column.sortable"
+                <th 
+                    cdkDrag
+                    [cdkDragDisabled]="!column.draggable"
+                    (click)="sort(column)" [class.sortable]="column.sortable"
+                    [style.width]="column.width"
                     [class.asc]="showAscIcon(column)"
                     [class.desc]="showDescIcon(column)">
                     {{ column.label }}
+                    @if (column.sortable) {
+                     <span class="resize-handle" (mousedown)="initiateColResize($event, $index)"></span>
+                    }
                 </th>
                 }
             </tr>
@@ -15,7 +26,7 @@
             @for (row of displayedData; track $index) {
             <tr>
                 @for (column of columns; track $index) {
-                <td>
+                <td [style.width]="column.width">
                     {{ row[column.key] }}
                 </td>
                 }

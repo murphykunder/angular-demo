@@ -126,3 +126,17 @@
 //     font-size: 12px;
 //   }
 // }
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 10;
+}
+
+.resize-handle:hover {
+  background-color: rgba(0,0,0,0.1);
+}

@@ -17,10 +17,10 @@ export class TodosComponent implements AfterViewInit {
   todos$ = this.todoSubject.asObservable();
 
   columns: TableColumn<Todo>[] = [
-    { key: 'userId', label: 'User ID', sortable: true },
-    { key: 'id', label: 'Todo ID', sortable: true },
-    { key: 'title', label: 'Title', sortable: true },
-    { key: 'completed', label: 'Completed', sortable: false }
+    { key: 'userId', label: 'User ID', sortable: true, width: '10%', resizable: true },
+    { key: 'id', label: 'Todo ID', sortable: true, width: '10%', resizable: true },
+    { key: 'title', label: 'Title', sortable: true, draggable: false, resizable: true, width: '60%' },
+    { key: 'completed', label: 'Completed', sortable: false, draggable: false, width: '20%' }
   ];
 
   ngAfterViewInit(): void {
