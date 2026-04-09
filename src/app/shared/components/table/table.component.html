@@ -21,7 +21,7 @@
                 <tr>
                     @if (expandable) {
                     <td>
-                        <button (click)="toggleRow($index)">
+                        <button [attr.data-test-id]="'expand-btn-' + $index" (click)="toggleRow($index)">
                             <!-- {{ expandedRows.has($index) ? '−' : '+' }} -->
                             {{ expandedRow === $index ? '−' : '+' }}
                         </button>

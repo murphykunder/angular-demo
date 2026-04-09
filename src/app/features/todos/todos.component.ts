@@ -27,7 +27,6 @@ export class TodosComponent implements AfterViewInit {
     this.todoService.getTodos().subscribe({
       next: (todos) => {
         this.todoSubject.next(todos);
-        console.log(this.todoSubject.getValue());
       },
       error: (error) => console.error('Error fetching todos:', error)
     });
