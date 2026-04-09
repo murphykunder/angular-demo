@@ -10,5 +10,9 @@ export const routes: Routes = [
     {
         path: 'cart',
         loadChildren: () => import('./features/cart/cart-module').then(m => m.CartModule)
+    },
+    {
+        path: 'todos',
+        loadComponent: () => import('./features/todos/todos.component').then(m => m.TodosComponent)
     }
 ];

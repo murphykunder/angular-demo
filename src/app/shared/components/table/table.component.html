@@ -1,73 +1,75 @@
-<div class="table-wrapper">
-    <table class="custom-table" [style.width.%]="getTableWidthPercent()">
-        <thead cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
-            <tr>
-                @if (expandable) {
-                <th></th>
-                }
-                @for (column of columns; track $index) {
-                <th [style.width]="column.width" cdkDrag [cdkDragDisabled]="!column.draggable" (click)="sort(column)"
-                    [class.sortable]="column.sortable" [class.asc]="showAscIcon(column)"
-                    [class.desc]="showDescIcon(column)" appResizableColumnDirective [colIndex]="$index"
-                    (resize)="onColumnResize($event)" (resizingChange)="isColResizing = $event">
-                    {{ column.label }}
-                </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-        @for (row of displayedData; track $index) {
-            <tr>
-                @if (expandable) {
-                <td>
-                    <button (click)="toggleRow($index)">
-                        <!-- {{ expandedRows.has($index) ? '−' : '+' }} -->
-                          {{ expandedRow === $index ? '−' : '+' }}
-                    </button>
-                </td>
-                }
-                @for (column of columns; track $index) {
-                <td [style.width]="column.width">
-                    {{ row[column.key] }}
-                </td>
-                }
-            </tr>
-            <!-- @if (expandable && expandedRows.has($index)) { -->
-            @if (expandable && expandedRow === $index) {
-            <tr>
-                <td [attr.colspan]="columns.length + (expandable ? 1 : 0)">
-                    <table class="nested-table">
-                        <thead>
-                            <tr>
-                                @for (col of nestedColumns; track $index) {
-                                <th>{{ col.label }}</th>
+<div class="app-table">
+    <div class="table-wrapper">
+        <table class="custom-table" [style.width.%]="getTableWidthPercent()">
+            <thead cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
+                <tr>
+                    @if (expandable) {
+                    <th [style.width]="'30px'"></th>
+                    }
+                    @for (column of columns; track $index) {
+                    <th [style.width]="column.width" cdkDrag [cdkDragDisabled]="!column.draggable"
+                        (click)="sort(column)" [class.sortable]="column.sortable" [class.asc]="showAscIcon(column)"
+                        [class.desc]="showDescIcon(column)" appResizableColumnDirective [colIndex]="$index"
+                        (resize)="onColumnResize($event)" (resizingChange)="isColResizing = $event">
+                        {{ column.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (row of displayedData; track $index) {
+                <tr>
+                    @if (expandable) {
+                    <td>
+                        <button (click)="toggleRow($index)">
+                            <!-- {{ expandedRows.has($index) ? '−' : '+' }} -->
+                            {{ expandedRow === $index ? '−' : '+' }}
+                        </button>
+                    </td>
+                    }
+                    @for (column of columns; track $index) {
+                    <td [style.width]="column.width">
+                        {{ row[column.key] }}
+                    </td>
+                    }
+                </tr>
+                <!-- @if (expandable && expandedRows.has($index)) { -->
+                @if (expandable && expandedRow === $index) {
+                <tr>
+                    <td [attr.colspan]="columns.length + (expandable ? 1 : 0)">
+                        <table class="nested-table">
+                            <thead>
+                                <tr>
+                                    @for (col of nestedColumns; track $index) {
+                                    <th>{{ col.label }}</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (child of (row[nestedKey!] || []); track $index) {
+                                <tr>
+                                    @for (col of nestedColumns; track $index) {
+                                    <td>{{ child[col.key] }}</td>
+                                    }
+                                </tr>
                                 }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (child of (row[nestedKey!] || []); track $index) {
-                            <tr>
-                                @for (col of nestedColumns; track $index) {
-                                <td>{{ child[col.key] }}</td>
-                                }
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            }
-        }
-        </tbody>
-    </table>
-</div>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
 
-<div class="pagination">
-    <button (click)="goToPage(currentPage-1)" [disabled]="currentPage === 1">Previous</button>
-    @for (p of [].constructor(totalPages); track $index) {
-    <button (click)="goToPage($index + 1)" [class.active]="currentPage === $index + 1">
-        {{ $index + 1 }}
-    </button>
-    }
-    <button (click)="goToPage(currentPage+1)" [disabled]="currentPage === totalPages">Next</button>
+    <div class="pagination">
+        <button (click)="goToPage(currentPage-1)" [disabled]="currentPage === 1">Previous</button>
+        @for (p of [].constructor(totalPages); track $index) {
+        <button (click)="goToPage($index + 1)" [class.active]="currentPage === $index + 1">
+            {{ $index + 1 }}
+        </button>
+        }
+        <button (click)="goToPage(currentPage+1)" [disabled]="currentPage === totalPages">Next</button>
+    </div>
 </div>
