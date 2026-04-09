@@ -2,35 +2,62 @@
     <table class="custom-table" [style.width.%]="getTableWidthPercent()">
         <thead cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
             <tr>
+                @if (expandable) {
+                <th></th>
+                }
                 @for (column of columns; track $index) {
-                <th 
-                    [style.width]="column.width" 
-                    cdkDrag 
-                    [cdkDragDisabled]="!column.draggable" 
-                    (click)="sort(column)"
-                    [class.sortable]="column.sortable" 
-                    [class.asc]="showAscIcon(column)"
-                    [class.desc]="showDescIcon(column)"
-                    appResizableColumnDirective
-                    [colIndex]="$index"
-                    (resize)="onColumnResize($event)"
-                    (resizingChange)="isColResizing = $event"
-                    >
+                <th [style.width]="column.width" cdkDrag [cdkDragDisabled]="!column.draggable" (click)="sort(column)"
+                    [class.sortable]="column.sortable" [class.asc]="showAscIcon(column)"
+                    [class.desc]="showDescIcon(column)" appResizableColumnDirective [colIndex]="$index"
+                    (resize)="onColumnResize($event)" (resizingChange)="isColResizing = $event">
                     {{ column.label }}
                 </th>
                 }
             </tr>
         </thead>
         <tbody>
-            @for (row of displayedData; track $index) {
+        @for (row of displayedData; track $index) {
             <tr>
+                @if (expandable) {
+                <td>
+                    <button (click)="toggleRow($index)">
+                        <!-- {{ expandedRows.has($index) ? '−' : '+' }} -->
+                          {{ expandedRow === $index ? '−' : '+' }}
+                    </button>
+                </td>
+                }
                 @for (column of columns; track $index) {
                 <td [style.width]="column.width">
                     {{ row[column.key] }}
                 </td>
                 }
             </tr>
+            <!-- @if (expandable && expandedRows.has($index)) { -->
+            @if (expandable && expandedRow === $index) {
+            <tr>
+                <td [attr.colspan]="columns.length + (expandable ? 1 : 0)">
+                    <table class="nested-table">
+                        <thead>
+                            <tr>
+                                @for (col of nestedColumns; track $index) {
+                                <th>{{ col.label }}</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (child of (row[nestedKey!] || []); track $index) {
+                            <tr>
+                                @for (col of nestedColumns; track $index) {
+                                <td>{{ child[col.key] }}</td>
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
             }
+        }
         </tbody>
     </table>
 </div>

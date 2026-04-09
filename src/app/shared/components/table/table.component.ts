@@ -25,6 +25,11 @@ export class TableComponent<T> implements OnInit, OnChanges {
   @Input() data: T[] = [];
   @Input() columns: TableColumn<T>[] = [];
   @Input() pageSize = 10;
+  @Input() expandable = false;
+  @Input() nestedKey?: keyof T; // e.g. 'products'
+  @Input() nestedColumns: TableColumn<any>[] = [];
+  // expandedRows = new Set<number>();
+  expandedRow: number = -1;
 
   displayedData: T[] = [];
   currentPage = 1;
@@ -35,6 +40,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
 
   isColResizing = false;
   tableStartWidthPx = 0;
+  
 
   ngOnInit(): void {
     this.updateTable();
@@ -46,9 +52,19 @@ export class TableComponent<T> implements OnInit, OnChanges {
     }
   }
 
-  updateTable(): void {
-    let processedData = [...this.data];
+  toggleRow(index: number): void {
+    this.expandedRow = this.expandedRow === index ? -1 : index;
+  // if (this.expandedRows.has(index)) {
+  //   console.log('Collapsing row at index:', index);
+  //   this.expandedRows.delete(index);
+  // } else {
+  //   console.log('Expanding row at index:', index);
+  //   this.expandedRows.add(index);
+  // }
+}
 
+  updateTable(): void {
+    let processedData = Array.isArray(this.data) ? [...this.data] : [];
     if (this.sortKey) {
       processedData.sort((a, b) => {
         const valA = a[this.sortKey!];
@@ -68,7 +84,6 @@ export class TableComponent<T> implements OnInit, OnChanges {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.displayedData = processedData.slice(startIndex, endIndex);
-    console.log(this.displayedData)
 
   }
 
@@ -89,6 +104,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.updateTable();
+    this.expandedRow = -1;
   }
 
   showAscIcon(column: TableColumn<T>): boolean {

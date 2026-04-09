@@ -1,0 +1,7 @@
+<app-table 
+    [columns]="cartColumns" 
+    [nestedColumns]="productColumns"
+    [nestedKey]="'products'"
+    [data]="(cart$ | async) ?? []"
+    [expandable]="true"
+></app-table>
